@@ -2,8 +2,8 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
 
-import setup from 'src/setup';
-import type { Theme } from 'src/config';
+import setup from '../setup';
+import type { Theme } from '../config';
 
 export interface PictogrifyProps {
   text: string;

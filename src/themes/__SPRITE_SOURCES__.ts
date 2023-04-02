@@ -1,9 +1,9 @@
 import type { Theme } from 'src/config';
 
-import femaleSprite from 'src/themes/avataars-female/sprite';
-import maleSprite from 'src/themes/avataars-male/sprite';
-import maleFlatSprite from 'src/themes/male-flat/sprite';
-import monstersSprite from 'src/themes/monsters/sprite';
+import femaleSprite from './avataars-female/sprite';
+import maleSprite from './avataars-male/sprite';
+import maleFlatSprite from './male-flat/sprite';
+import monstersSprite from './monsters/sprite';
 
 type SpriteSources = {
   [key in Theme]: string;

@@ -1,4 +1,4 @@
-import themes from 'src/themes';
+import themes from '../themes';
 
 enum ThemeEnum {
   'avataars-female' = 'avataars-female',

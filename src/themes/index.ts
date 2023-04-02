@@ -1,7 +1,7 @@
-import avataarsFemale from 'src/themes/avataars-female';
-import avataarsMale from 'src/themes/avataars-male';
-import monsters from 'src/themes/monsters';
-import maleFlat from 'src/themes/male-flat';
+import avataarsFemale from './avataars-female';
+import avataarsMale from './avataars-male';
+import monsters from './monsters';
+import maleFlat from './male-flat';
 
 export default {
   'avataars-female': avataarsFemale,

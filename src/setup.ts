@@ -1,10 +1,10 @@
 // @ts-nocheck
-import config, { Theme } from 'src/config';
+import config, { Theme } from '../config';
 import hash from 'string-hash';
 import xmldoc from 'xmldoc';
 import _ from 'lodash';
 
-import { __SPRITE_SOURCES__ } from 'src/themes/__SPRITE_SOURCES__';
+import { __SPRITE_SOURCES__ } from '../themes/__SPRITE_SOURCES__';
 
 const spriteXml = _.transform(
   __SPRITE_SOURCES__,
