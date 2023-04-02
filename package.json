@@ -51,13 +51,16 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@evilmartians/lefthook": "^1.2.2",
     "@commitlint/config-conventional": "^17.0.2",
+    "@evilmartians/lefthook": "^1.2.2",
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
+    "@types/lodash": "^4.14.191",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
+    "@types/string-hash": "^1.1.1",
+    "@types/xmldoc": "^1.1.6",
     "commitlint": "^17.0.2",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",
@@ -126,7 +129,8 @@
           "singleQuote": true,
           "tabWidth": 2,
           "trailingComma": "es5",
-          "useTabs": false
+          "useTabs": false,
+          "endOfLine": "auto"
         }
       ]
     }
@@ -155,5 +159,11 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "react-native-svg": "^13.8.0",
+    "string-hash": "^1.1.3",
+    "xmldoc": "^1.2.0"
   }
 }

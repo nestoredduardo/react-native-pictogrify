@@ -1,76 +1,65 @@
-const setup = require('./setup')
+// @ts-nocheck
+import React from 'react';
+import { SvgXml } from 'react-native-svg';
 
-const req = require.context('../themes', true, /\.svg$/)
-req.keys().forEach(req)
+import setup from 'src/setup';
+import type { Theme } from 'src/config';
 
-const spriteDist = __SPRITE_DIST__ // eslint-disable-line no-undef
+export interface PictogrifyProps {
+  text: string;
+  theme: Theme;
+}
 
-module.exports = class Pictogrify {
-  constructor (text, theme) {
-    this.prop = setup(text, theme)
-  }
+export default function Pictogrify(props: PictogrifyProps) {
+  const { text, theme } = props;
 
-  get svg () {
-    return Pictogrify.template(this.prop)
-  }
+  const property = setup(text, theme);
 
-  get base64 () {
-    const data = Pictogrify.template(this.prop, 'inline')
-    return `data:image/svg+xml;base64,${window.btoa(data)}`
-  }
-
-  render ($element) {
-    $element.innerHTML = this.svg
-  }
-
-  download (name, mime = 'image/png') {
-    const canvas = document.createElement('canvas')
-    canvas.width = this.prop.width
-    canvas.height = this.prop.height
-    const ctx = canvas.getContext('2d')
-
-    const image = new Image()
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0)
-      const src = canvas.toDataURL(mime)
-      const a = document.createElement('a')
-      a.download = `${name}.png`
-      a.href = src
-      a.click()
-    }
-    image.src = this.base64
-  }
-
-  static template (prop, mode = 'use') {
-    let includes = []
+  const template = (prop, mode = 'use') => {
+    let includes = [];
 
     for (let item of Object.keys(prop.shapes)) {
-      includes.push(Pictogrify.include(prop, item, prop.shapes[item], mode))
+      includes.push(include(prop, item, prop.shapes[item], mode));
     }
 
     return `
-      <svg viewBox="0 0 ${prop.width} ${prop.height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <g>
-          <rect fill="${prop.colors.background}" x="0" y="0" width="${prop.width}" height="${prop.height}"></rect>
-          ${includes.join('\n')}
-        </g>
-      </svg>`
-  }
+      <svg viewBox="0 0 ${prop.width} ${
+      prop.height
+    }" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          ${Object.keys(prop.symbols)
+            .map((key) => {
+              const svg = prop.symbols[key];
+              return `<symbol id="${key}" viewBox="0 0 ${prop.width} ${prop.height}">${svg}</symbol>`;
+            })
+            .join('\n')}
+        </defs>
+        <rect fill="${
+          prop.colors ? prop.colors.background : '#fff'
+        }" x="0" y="0" width="${prop.width}" height="${prop.height}"></rect>
+        ${includes.join('\n')}
+      </svg>
+    `;
+  };
 
-  static include (prop, part, index, mode) {
-    const fillable = prop.fill[part] ? `fill="${prop.fill[part]}"` : ''
+  const include = (prop, part, index, mode) => {
+    const fillable = prop.fill[part] ? `fill="${prop.fill[part]}"` : '';
 
     if (mode === 'use') {
-      return `<use class="${part}" ${fillable} xlink:href="${location.origin}${spriteDist.url}${prop.theme}.svg#${part}-${(index)}" />`
+      return `<use class="${part}" ${fillable} xlink:href="#${part}-${index}" width="${prop.width}" height="${prop.height}"/>`;
     }
 
     if (mode === 'inline') {
-      const svg = prop.symbols[`${part}-${index}`]
+      const svg = prop.symbols[`${part}-${index}`];
 
       return `
         <svg class="${part}" ${fillable} xmlns="http://www.w3.org/2000/svg">
         ${svg}
-        </svg>`
+        </svg>`;
     }
-  }
+
+    return '';
+  };
+
+  return <SvgXml xml={template(property)} />;
 }

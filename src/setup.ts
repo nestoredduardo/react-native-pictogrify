@@ -1,17 +1,19 @@
-import config from 'src/config';
-const hash = require('string-hash');
-const xmldoc = require('xmldoc');
-const _ = require('lodash');
+// @ts-nocheck
+import config, { Theme } from 'src/config';
+import hash from 'string-hash';
+import xmldoc from 'xmldoc';
+import _ from 'lodash';
 
-const spriteSources = __SPRITE_SOURCES__; // eslint-disable-line no-undef
+import { __SPRITE_SOURCES__ } from 'src/themes/__SPRITE_SOURCES__';
+
 const spriteXml = _.transform(
-  spriteSources,
-  (result, value, key) =>
+  __SPRITE_SOURCES__,
+  (result: any, value: any, key: any) =>
     (result[key] = new xmldoc.XmlDocument(value).firstChild),
   {}
 );
 
-module.exports = (text, theme = config.defaultTheme) => {
+const setup = (text: string, theme: Theme = config.defaultTheme) => {
   const options = config.themes[theme];
   const uid = ('' + hash(text)).replace(/0/g, '1').split('');
   const viewBox = options.viewBox.split(' ');
@@ -20,7 +22,7 @@ module.exports = (text, theme = config.defaultTheme) => {
 
   const shapes = _(options.shapes)
     .keys()
-    .map((shape, index) => [
+    .map((shape: string, index: number) => [
       shape,
       uid[index] > options.shapes[shape].length || _.isUndefined(uid[index])
         ? '01'
@@ -31,7 +33,7 @@ module.exports = (text, theme = config.defaultTheme) => {
 
   const colors = _(options.colors)
     .keys()
-    .map((color, index) => {
+    .map((color: string, index: number) => {
       const item = options.colors[color];
       const maxLength = item.length - 1;
 
@@ -44,13 +46,13 @@ module.exports = (text, theme = config.defaultTheme) => {
     .value();
 
   const fill = _(options.shapes)
-    .mapValues((shape) => colors[shape.fill])
+    .mapValues((shape: any) => colors[shape.fill])
     .pickBy(_.identity)
     .value();
 
   const symbols = _.transform(
     spriteXml[theme].children,
-    (result, value) => {
+    (result: any, value: any) => {
       result[value.attr.id] = value.children.join('');
     },
     {}
@@ -58,3 +60,5 @@ module.exports = (text, theme = config.defaultTheme) => {
 
   return { theme, shapes, colors, fill, symbols, width, height };
 };
+
+export default setup;
